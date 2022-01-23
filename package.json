@@ -1,0 +1,27 @@
+{
+  "name": "bentlyretailco",
+  "version": "1.9.8",
+  "description": "A Ecommerce Retail API project. This first publishable version.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jholt1988/BentlyRetailCo.git"
+  },
+  "keywords": [
+    "API",
+    "ecommerce"
+  ],
+  "author": "J.Holt",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jholt1988/BentlyRetailCo/issues"
+  },
+  "homepage": "https://github.com/jholt1988/BentlyRetailCo#readme",
+  "dependencies": {
+    "dotenv": "^14.2.0",
+    "express": "^4.17.2"
+  }
+}

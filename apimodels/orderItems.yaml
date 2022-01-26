@@ -1,0 +1,22 @@
+title: orderItems
+type: object
+x-tags:
+  - orderItems
+description: 'Objects that have been ordered by user. These objects were once cartItems that have been changed into orderItems with the following properties: id- pk, cartItemID- fk referencing id column of cartitem table, cartID- referencing the id column of cart table, quantity- integer, and total- integer'
+properties:
+  id:
+    type: integer
+  cartItemID:
+    type: integer
+  cartID:
+    type: integer
+  quantity:
+    type: integer
+  total:
+    type: integer
+examples:
+  - id: 656
+    cartItemID: 73
+    cartID: 55
+    quantity: 2
+    total: 153

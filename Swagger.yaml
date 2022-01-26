@@ -1,0 +1,456 @@
+openapi: 3.0.0
+info:
+  title: BRCoAPI
+  version: '1.9'
+  description: 'An ecommerce API. That allows users to register, login, create and save carts, view and add inventory, and place and track orders. The 4 endpoints /register- to create new user records, /login- for existing to log in, /user- to view or update user information, /carts- to create/modify user cart objects, /store- to view/add/edit product records, /orders- to place and view user order records'
+  contact:
+    name: Jordan Holt
+    email: jordanh316@gmail.com
+servers:
+  - url: 'http://localhost:8080'
+    description: Dev
+  - description: ''
+paths:
+  '/users/{userId}':
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+        description: Id of an existing user.
+    get:
+      summary: Get User Info by User ID
+      tags: []
+      responses:
+        '200':
+          description: User Found
+          content:
+            application/json:
+              schema:
+                $ref: ./models/user.yaml
+              examples:
+                Get User Alice Smith:
+                  value:
+                    id: 142
+                    firstName: Alice
+                    lastName: Smith
+                    email: alice.smith@gmail.com
+                    dateOfBirth: '1997-10-31'
+                    emailVerified: true
+                    signUpDate: '2019-08-24'
+        '404':
+          description: User Not Found
+      operationId: get-users-userId
+      description: Retrieve the information of the user with the matching user ID.
+    patch:
+      summary: Update User Information
+      operationId: patch-users-userId
+      responses:
+        '200':
+          description: User Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Updated User Rebecca Baker:
+                  value:
+                    id: 13
+                    firstName: Rebecca
+                    lastName: Baker
+                    email: rebecca@gmail.com
+                    dateOfBirth: '1985-10-02'
+                    emailVerified: false
+                    createDate: '2019-08-24'
+        '404':
+          description: User Not Found
+        '409':
+          description: Email Already Taken
+      description: Update the information of an existing user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  description: 'If a new email is given, the user''s email verified property will be set to false.'
+                dateOfBirth:
+                  type: string
+            examples:
+              Update First Name:
+                value:
+                  firstName: Rebecca
+              Update Email:
+                value:
+                  email: rebecca@gmail.com
+              Update Last Name & Date of Birth:
+                value:
+                  lastName: Baker
+                  dateOfBirth: '1985-10-02'
+        description: Patch user properties to update.
+  /register:
+    post:
+      summary: Create New User
+      operationId: post-register
+      responses:
+        '200':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                New User Bob Fellow:
+                  value:
+                    id: 12
+                    firstName: Bob
+                    lastName: Fellow
+                    email: bob.fellow@gmail.com
+                    dateOfBirth: '1996-08-24'
+                    emailVerified: false
+                    createDate: '2020-11-18'
+        '400':
+          description: Missing Required Information
+        '409':
+          description: Email Already Taken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                dateOfBirth:
+                  type: string
+                  format: date
+                userName:
+                  type: string
+                  description: 'unique userName '
+                password:
+                  type: string
+                  description: user password
+                id:
+                  type: string
+                  description: uuid for user
+              required:
+                - firstName
+                - lastName
+                - email
+                - dateOfBirth
+                - userName
+                - password
+                - id
+            examples:
+              Create User Bob Fellow:
+                  value:
+                  firstName: Bob
+                  lastName: Fellow
+                  email: bob.fellow@gmail.com
+                  dateOfBirth: '1996-08-24'
+              Create User Bentley Holt:
+                value:
+                  firstName: Bentley
+                  lastName: Holt
+                  email: BentHolt@gmail.com
+                  dateOfBirth: '2019-08-24'
+                  userName: DaBigDog
+                  password: password
+                  id: 4ab7066b-0685-4e3b-8817-2f4268dc09c8
+          application/x-www-form-urlencoded:
+            schema:
+              type: object
+              properties: {}
+        description: Post the necessary fields for the API to create a new user.
+      description: Create a new user.
+    parameters: []
+  /login:
+    post:
+      summary: login
+      tags:
+        - login
+      responses:
+        '200':
+          description: User Logged In
+        '401':
+          description: Unauthorized
+      operationId: post-login
+      description: Allows user to login
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                userName:
+                  type: string
+                password:
+                  type: string
+  /store:
+    get:
+      summary: get-products
+      tags:
+        - store
+      responses:
+        '200':
+          description: 'Products Found '
+        '401':
+          description: Unauthorized-You must be logged in to complete this function
+      operationId: get-products
+      description: get all products records in store
+    post:
+      summary: post-product
+      tags:
+        - store
+      responses: {}
+      operationId: post-store
+      description: Create a new product record
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./models/products.yaml
+            examples:
+              Add HP Tablet Product:
+                value:
+                  id: 53
+                  name: HP Lighting Fast Tablet
+                  price: 2500
+                  description: A state of the art test tablet
+                  quantity: 25
+                  vendorID: 123
+        description: Enter necessary fields to add a new product to store
+  '/store/{productID}':
+    parameters:
+      - schema:
+          type: integer
+        name: productID
+        in: path
+        required: true
+        description: product record id
+    get:
+      summary: get-product
+      tags: []
+      responses:
+        '200':
+          description: Product Found
+        '404':
+          description: Product Not Found
+      operationId: get-store-productID
+      description: Get product record of cooresponding id
+    put:
+      summary: update-product
+      tags: []
+      responses: {}
+      operationId: put-store-productID
+      description: Update Product Record Of Cooresponding Product ID
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./models/products.yaml
+            examples:
+              Update Inventory Quantity For Bluetooth:
+                value:
+                  id: 53
+                  name: Lighting Fast Tablet
+                  price: 2500
+                  description: A state of the art test tablet
+                  quantity: 30
+                  vendorID: 123
+        description: Update necessary fields for product record
+    delete:
+      summary: delete-product
+      tags: []
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request
+      operationId: delete-store-productID
+      description: Delete product from store
+  /carts/user:
+    get:
+      summary: get-cart
+      tags:
+        - cart
+      responses:
+        '200':
+          description: 'User cart found '
+        '404':
+          description: Cart Not Found
+          content:
+            application/json:
+              schema:
+                $ref: ./models/cart.yaml
+              examples:
+                User Cart:
+                  value:
+                    id: 1525
+                    userID: 7dc3f104-7314-497a-a983-1f95a6dc620e
+                    created: 'jan 21, 2022'
+                    modified: 'jan 21, 2022'
+                    status: ACTIVE
+      operationId: get-carts-user
+      description: Load user cart
+    post:
+      summary: post-cart
+      tags:
+        - cart
+      responses:
+        '201':
+          description: User Cart Created
+        '400':
+          description: Bad Request- Cart Not Created
+      operationId: post-carts-user
+      description: create user cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cart:
+                  $ref: ./models/cart.yaml
+                cartItems:
+                  $ref: ./models/cartItems.yaml
+        description: Create user cart
+    put:
+      summary: put-cart
+      tags:
+        - cart
+      responses:
+        '200':
+          description: Item(s) added to user cart
+        '400':
+          description: Error adding items to cart
+      operationId: put-carts-user
+      description: Add cartItems to cart
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./models/cartItems.yaml
+        description: Add products from store to user cart
+  /order/user:
+    get:
+      summary: get-orders
+      tags:
+        - order
+      responses:
+        '200':
+          description: User orders found
+        '404':
+          description: No user orders found
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: ./models/orders.yaml
+      operationId: get-order-user
+      description: get all user orders
+    post:
+      summary: post-order
+      tags:
+        - order
+      responses:
+        '201':
+          description: Created
+        '400':
+          description: Bad Request-Error placing order
+          content:
+            application/json:
+              schema:
+                $ref: ./models/orders.yaml
+      operationId: post-order-user
+      description: Place a new order for user
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./models/orders.yaml
+        description: Order placed by yser
+    put:
+      summary: update-order
+      tags:
+        - order
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  order:
+                    $ref: ./models/orders.yaml
+                  orderItems:
+                    $ref: ./models/orderItems.yaml
+      operationId: put-order-user
+      description: Add items to order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: ./models/orderItems.yaml
+        description: add orderitems to order
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      description: ''
+      x-examples:
+        Alice Smith:
+          id: 142
+          firstName: Alice
+          lastName: Smith
+          email: alice.smith@gmail.com
+          dateOfBirth: '1997-10-31'
+          emailVerified: true
+          signUpDate: '2019-08-24'
+      properties:
+        id:
+          type: integer
+          description: Unique identifier for the given user.
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1997-10-31'
+        emailVerified:
+          type: boolean
+          description: Set to true if the user's email has been verified.
+        createDate:
+          type: string
+          format: date
+          description: The date that the user was created.
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - emailVerified
+  securitySchemes:
+    AIzaSyC6g-rr9CpU1M50Y-6YKCAckYbpcdfXMYI:
+      type: oauth2

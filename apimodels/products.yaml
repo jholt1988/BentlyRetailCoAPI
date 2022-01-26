@@ -1,0 +1,27 @@
+title: products
+type: object
+x-tags:
+  - products
+  - inventory
+description: 'a product object with id, name, description, inventory quantity, price, and vendor id'
+properties:
+  id:
+    type: integer
+  name:
+    type: string
+  price:
+    type: integer
+  description:
+    type: string
+  quantity:
+    type: number
+  vendorID:
+    type: integer
+examples:
+  - id: 53
+    name: Lighting Fast Tablet
+    price: 2500
+    description: A state of the art test tablet
+    quantity: 25
+    vendorID: 123
+x-internal: true

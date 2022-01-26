@@ -1,0 +1,22 @@
+title: cart
+type: object
+x-tags:
+  - cart
+description: 'An user cart object with id, userID, created, modified, and status-ACTIVE/NON-ACTIVE'
+properties:
+  id:
+    type: number
+  userID:
+    type: string
+  created:
+    type: string
+  modified:
+    type: string
+  status:
+    type: string
+examples:
+  - id: 1525
+    userID: 7dc3f104-7314-497a-a983-1f95a6dc620e
+    created: 'jan 21, 2022'
+    modified: 'jan 21, 2022'
+    status: ACTIVE

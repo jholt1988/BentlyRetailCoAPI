@@ -1,0 +1,30 @@
+title: orders
+type: object
+x-tags:
+  - orders
+description: |-
+  An order object for a users placed order after user selects items in cart. The order object the following properties-
+  id- pk, userID- fk- refrencing the id column of the user table, created-date, modified-date, items- an array of order items objects, total-integer, and status-string. 
+properties:
+  id:
+    type: integer
+  userID:
+    type: string
+  created:
+    type: string
+  modified:
+    type: string
+  items:
+    type: object
+  total:
+    type: integer
+  status:
+    type: string
+examples:
+  - id: 1530
+    userID: 7dc3f104-7314-497a-a983-1f95a6dc620e
+    created: 1/22/2022
+    modified: 1/22/2022
+    items: {}
+    total: 250.56
+    status: PLACED

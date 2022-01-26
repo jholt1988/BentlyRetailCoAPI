@@ -1,0 +1,33 @@
+title: user
+type: object
+x-tags:
+  - user
+  - customer
+description: 'user model with user id, email, username and other information'
+examples:
+  - id: d402bce9-ba3a-44c1-b40e-eb77caaceef0
+    userName: testUser
+    email: test@gmail.com
+    firstName: Test
+    lastName: testerman
+    password: testpassword
+  - id: 7dc3f104-7314-497a-a983-1f95a6dc620e
+    userName: testUser2
+    email: test1@gmail.com
+    firstName: Test1
+    lastName: testerman
+    password: testpassword
+properties:
+  id:
+    type: string
+  userName:
+    type: string
+  email:
+    type: string
+  firstName:
+    type: string
+  lastName:
+    type: string
+  password:
+    type: string
+x-internal: true

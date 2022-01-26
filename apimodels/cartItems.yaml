@@ -1,0 +1,20 @@
+title: cartItems
+type: object
+x-tags:
+  - cartItems
+  - cart
+description: 'An item object that is associated with an user cart. The properties are an id, cartID, productID, and quantity. The id is the primary key. The cartID, productID are foreign keys with referencing their respective tables. '
+properties:
+  id:
+    type: integer
+  cartID:
+    type: integer
+  productID:
+    type: integer
+  quantity:
+    type: integer
+examples:
+  - id: 580
+    cartID: 73
+    productID: 12
+    quantity: 8

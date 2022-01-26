@@ -1,5 +1,6 @@
 const passport = require('passport'),
         LocalStrategy = require('passport-local') ;
+const UserModel = require('../Models/User');
 
 
 module.exports = async (app) => {
@@ -10,6 +11,7 @@ module.exports = async (app) => {
    
     //serialize user to session
     passport.serializeUser(function (user, done) {
+    
         done(null, user.id)
     })
 

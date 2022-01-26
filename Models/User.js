@@ -2,7 +2,7 @@
 const { v4: uuid } = require('uuid')
 const moment = require('moment')
 const { db } = require('../index')
-const pgp = require('pg-promise')
+const pgp = require('pg-promise')({capSQL:true})
 
 module.exports = class UserModel {
     constructor(data = {}) {
@@ -92,9 +92,33 @@ module.exports = class UserModel {
             throw new Error('Error Updating User Record')
         }
 
-
+       
     }
 
+    /**
+     * Delete user record
+     * @param {userId} userId 
+     * @returns {Null}
+     */
+    async delete(userId) {
+        //SQL statement
+
+        const statement = pgp.as.format('DELETE * FROM users WHERE id  = userId', [userId]);
+
+        //Execute User
+
+        const result = db.query(statement);
+
+        if (result) {
+            return result;
+
+        }
     
+        if (!result) {
+            throw new Error('Error deleting user record')
+        }
+
+
+    }
     
 }

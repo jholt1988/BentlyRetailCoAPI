@@ -96,6 +96,32 @@ module.exports = class UserModel {
     }
 
     /**
+     * 
+     * @param {Object} userName 
+     * @returns {Object|Null} user record 
+     */
+
+    async findOneByUserId(username) {
+        //SQL
+        const statement = pgp.as.format('SELECT * FROM users WHERE username = $1')
+        const values = [username]
+
+        //Execute SQL
+
+        const result = await db.query(statement, values)
+
+        if (result) {
+            return result
+        }
+
+        if (!result) {
+            throw new Error('User Not Found!')
+        }
+
+        return null 
+    }
+
+    /**
      * Delete user record
      * @param {userId} userId 
      * @returns {Null}

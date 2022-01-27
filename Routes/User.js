@@ -7,26 +7,27 @@ module.exports = (app) => {
     //Router
     app.use('/users', router);
 
-    router.get('/:userId', async (req, res, next) => {
+    router.get('/:userId', async (req, res, done) => {
         try {
             const { userId } = req.params
             const user = await userServiceInstance.findOneByUserId(userId);
 
             if (user) {
-                res.status(200).send(user)
+               return res.status(200).send(user)
             }
 
             if (!user) {
                 throw new Error('UH OH! User Not Found')
             }
-        
+
+          
         } catch (err) {
-            next(err)
+            done(err)
         }
     });
 
 
-    router.put('/:userId', async (req, res, next) => {
+    router.put('/:userId', async (req, res, done) => {
         try {
             const { userId } = req.params;
             const { ...user } = req.body;
@@ -42,11 +43,12 @@ module.exports = (app) => {
             }
 
             if (updateUser) {
-                res.status(200).send(updateUser)
+              return  res.status(200).send(updateUser)
             }
             
+            
         } catch (err) {
-            next(err)
+            done(err)
         }
     })
 

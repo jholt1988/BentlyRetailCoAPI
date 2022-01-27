@@ -1,18 +1,23 @@
-const pgp = require('pg-promise');
-const {DB} = require('../config')
 
-module.exports = database => {
-    const cn = {
-        host: DB.HOST,
-        port: DB.PORT,
-        database: DB.DATABASE,
-        user: DB.USER,
-        password: DB.PASSWORD
 
-    }
-const db = pgp(cn)
-    module.exports = {
-        query: (text, params) => pool.query(text, params);
-} 
+    const initOptions = {
+        connect(client, dc, useCount) {
+            const cp = client.connectionParameters;
 
-}
+            console.log('Connected to Database', cp.database);
+        }
+
+    };
+
+    const pgp = require('pg-promise')(initOptions);
+
+    const { cn } = require('../config');
+
+
+
+
+
+const db = pgp(cn);
+db.connect();
+module.exports = db;
+

@@ -38,7 +38,7 @@ module.exports = class  UserService {
 
 
         } catch (err) {
-            throw new Error()
+            throw new Error(err)
         }
     }
  
@@ -56,12 +56,12 @@ module.exports = class  UserService {
 
 
         } catch (err) {
-            throw new Error()
+            throw Error(err)
         }
     }
     async updateUser(data) {
         try {
-            const updateUser = userModelInstance.Update(data)
+            const updateUser = await userModelInstance.Update(data)
             
             if (!updateUser) {
                 throw new Error('ERROR! User Not Updated')

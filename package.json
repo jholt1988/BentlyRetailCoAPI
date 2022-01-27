@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": " node -r dotenv/config index.js",
-    "create-db" : "node -r dotenv/config db/dbSQL.js"
+    "create-db": "node -r dotenv/config db/dbSQL.js"
   },
   "repository": {
     "type": "git",
@@ -34,8 +34,10 @@
     "passport": "^0.5.2",
     "passport-local": "^1.0.0",
     "pg-promise": "^10.11.1",
+    "swagger-jsdoc": "^6.1.0",
     "swagger-ui": "^4.2.1",
     "swagger-ui-express": "^4.3.0",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "yaml": "^2.0.0-1"
   }
 }

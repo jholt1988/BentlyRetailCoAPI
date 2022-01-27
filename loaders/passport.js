@@ -1,33 +1,34 @@
-const passport = require('passport'),
-        LocalStrategy = require('passport-local') ;
-const UserModel = require('../Models/User');
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const authService = require('../Services/AuthService');
+const authServiceInstance = new authService();
 
-
-module.exports = async (app) => {
-   //initialize passport and passport session 
+module.exports = (app) => {
     app.use(passport.initialize());
     app.use(passport.session());
+
+    passport.serializeUser((user, done) => {
+        done(null, user.id);
+    });
+
+    passport.deserializeUser((id, done) => {
+        done(null, { id });
+    });
     
-   
-    //serialize user to session
-    passport.serializeUser(function (user, done) {
+    passport.use('local', new LocalStrategy(
+        async (username, password, done) => {
+            try {
+                const user = await authServiceInstance.Login({username:username, password:password });
+
+                return done(null, user);
+
+            } catch (err) {
+                done(err);
+            }
+        })
+
+    );
+
+    return passport  
     
-        done(null, user.id)
-    })
-
-    //deserialize user from session
-
-    passport.deserializeUser(function (id, done){
-        done(null, {id})
-    })
-
-
-    //user authentication
-
-    passport.use(new LocalStrategy(function (username, password, done) {
-        
-        
-    }
-
-    ))
 }

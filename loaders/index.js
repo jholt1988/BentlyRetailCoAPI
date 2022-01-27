@@ -1,16 +1,21 @@
-const expressLoader = require('./express')
-const passportLoader = require('./passport')
-const swaggerLoader = require('./swagger')
+const expressLoader = require('./express');
+const passportLoader = require('./passport');
+const swaggerLoader = require('./swagger');
+const routerLoader = require('../Routes');
 
 module.exports = async (app) => {
     //Load express middleware
     const expressApp = await expressLoader(app);
 
-    const passport = await passportLoader(expressApp)
+    // Load passport authentication  middleware
+    const passport =  await passportLoader(expressApp);
+
+     routerLoader(app, passport)
+
 
 
     //Load swagger middleware
-    await swaggerLoader(app)
+    swaggerLoader(app)
 
 
     //Error Handling
@@ -19,8 +24,9 @@ module.exports = async (app) => {
 
         const { errorMessage, status } = err;
 
-        return res.status(status | 500).send({ errorMessage });
+         res.status(status | 500).send({ errorMessage });
         
+
 
     });
     return app;

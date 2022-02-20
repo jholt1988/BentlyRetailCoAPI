@@ -5,9 +5,13 @@ module.exports = class ProductsService {
     async create(data) {
         try {
             const newProduct = await ProductModelInstance.create(data);
+            console.log(newProduct)
+            if (!newProduct) {
+                throw new Error('Product Not Added')
+            }
             return newProduct
         } catch (err) {
-            throw new Error('Product Not Added')
+            throw new Error('err')
         }
     }
 
@@ -31,10 +35,11 @@ module.exports = class ProductsService {
 
     async updateProduct(data) {
         try {
-            const { productName, ...product } = data;
-            const getProduct = await ProductModelInstance.getOne(productName);
-            const updateProduct = await ProductModelInstance.update({ product: getProduct, ...product });
-            return updateProduct;
+              const {productName, ...props} = data
+            
+                const updateProduct = await ProductModelInstance.update({ productName:productName, ...props })
+                return updateProduct
+            
         } catch (error) {
             throw new Error('Error Updating Product Record');
         }

@@ -19,22 +19,23 @@ module.exports = (app) => {
 
     router.post('/products', async (req, res, done) => {
         try {
-            const data = req.body
+            const {data} = req.body
             const newProduct = ProductsServiceInstance.create(data);
-            return res.status(200).send(newProduct)
-            
+             res.status(200).send(newProduct)
+            done();
         } catch (error) {
             error = "Error Adding Product"
 
         }
     });
 
-    router.patch('/products/?productName', async (req, res, done) => {
+    router.put('/products/:productName', async (req, res, done) => {
         try {
             const { props } = req.body
-            req.query = productName
+            const {productName} = req.params
             const updateProduct = await ProductsServiceInstance.updateProduct({ productName, ...props })
-            return res.status(200).send(updateProduct)
+            console.log(updateProduct)
+             res.status(200).send(updateProduct)
         } catch (error) {
             error = 'Error Updating Product';
             done(error);

@@ -28,8 +28,9 @@ module.exports = (app, passport) => {
 
             const user = await authServiceInstance.Login({ username: username, password: password });
 
-             res.status(200).send(user)
-
+           return  res.status(200).send(user)
+           
+        
         
         } catch (err) {
             done(err);

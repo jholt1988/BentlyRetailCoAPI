@@ -5,7 +5,7 @@ const routerLoader = require('../Routes');
 
 module.exports = async (app) => {
     //Load express middleware
-    const expressApp = await expressLoader(app);
+    const expressApp =  expressLoader(app);
 
     // Load passport authentication  middleware
     const passport =  await passportLoader(expressApp);
@@ -15,7 +15,7 @@ module.exports = async (app) => {
 
 
     //Load swagger middleware
-    swaggerLoader(app)
+  await  swaggerLoader(app)
 
 
     //Error Handling
@@ -26,7 +26,7 @@ module.exports = async (app) => {
 
          res.status(status | 500).send({ errorMessage });
         
-
+        next(err)
 
     });
     return app;

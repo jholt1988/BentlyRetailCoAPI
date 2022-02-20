@@ -25,16 +25,17 @@ module.exports = class ProductsModel {
 
             //SQL Statement
 
-            const statement = pgp.helpers.insert({ id:uuidv4(), productName, ...props }, null, 'Products');
+            const statement = pgp.helpers.insert({ id:uuidv4(), productName, ...props }, null, 'Products') + "RETURNING *";
 
             // Execute Statement
 
             const result = db.query(statement);
 
+            if (result.rows) {
         
-                return result;
-            
-
+                return result[0];
+            }
+            return null
         
         } catch (err) {
             throw new Error(err);
@@ -48,15 +49,15 @@ module.exports = class ProductsModel {
      */
     async update(data) {
         try{
-            const { id, ...props } = data;
+            const { productName, ...props } = data;
 
             //SQL
-            const condition = pgp.as.format("WHERE id = id", { id });
-            const statement = pgp.helpers.update(props, null, 'Products');
+            const condition = pgp.as.format("WHERE 'productName' = ${productName}", { productName:this.productName });
+            const statement = pgp.helpers.update(props, null, 'Products') + condition;
 
             //Execute
-
-            const result = db.query(statement, condition);
+            console.log(db.query(statement,condition))
+            const result = await db.query(statement);
 
             
                 return result[0]
@@ -69,12 +70,14 @@ module.exports = class ProductsModel {
     /**
      * Find one product record by productName
      * @param {Object} productName 
-     * @returns {Object|Null} Product Record That Cooresponds With productName
+     * @returns {Object|Null} Product Record That Corresponds With productName
      */
     async getOne(productName) {
         try {
             //SQL
-            const statement = pgp.as.format('SELECT * FROM "Products" WHERE "productName" = $1 ');
+            const statement = `SELECT * 
+                                    FROM "Products"
+                                    WHERE "productName" = $1 `;
             const values = [productName]
 
             //Execute
@@ -82,7 +85,7 @@ module.exports = class ProductsModel {
          const result = await db.query(statement, values);
 
          
-            if (result) {
+            if (result.rows) {
                 return result[0];
             }  
             
@@ -99,7 +102,7 @@ module.exports = class ProductsModel {
     async getAll() {
         try {
             //SQL
-            const statement = pgp.as.format('SELECT * FROM "Products"');
+            const statement = "SELECT * FROM  Products ";
 
             //Execute 
             const result = await db.query(statement);
@@ -107,7 +110,7 @@ module.exports = class ProductsModel {
             if (result) {
                 return result
             }
-            
+            return null
         } catch (err) {
             throw new Error(err)
         }
@@ -116,9 +119,9 @@ module.exports = class ProductsModel {
 
     async createVendor(data) {
         try {
-            const{id,...vendor} = data
+            const{id,vendorName,...vendor} = data
             //SQL
-            const statement = pgp.helpers.insert({id:uuidv4(), ...vendor}, null, 'Vendors');
+            const statement = pgp.helpers.insert({id:uuidv4(),vendorName, ...vendor}, null, 'Vendors') + 'RETURNING *';
 
             //Execute
             const result = await db.query(statement);
@@ -134,7 +137,10 @@ module.exports = class ProductsModel {
     async getOneVendor(vendorName) {
         try {
             //SQL
-            const statement = pgp.as.format('SELECT * FROM "Vendors" WHERE "vendorName" = $1 ');
+            const statement = `SELECT * 
+                                    FROM "Vendors"
+                                    WHERE "vendorName" = $1
+                                    RETURNING *`;
             const values = [vendorName]
 
             //Execute
@@ -143,7 +149,7 @@ module.exports = class ProductsModel {
 
 
         
-                return result[0];
+                return result;
             
 
         
